@@ -5,17 +5,136 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* 前面的樣式保持不變 */
-        .detail-status {
-            font-size: 0.9em;
-            color: #666;
-            margin-top: 5px;
+        body { 
+            font-family: 'Noto Serif TC', serif;
+            padding: 20px; 
+            max-width: 800px; 
+            margin: 0 auto;
+            line-height: 1.6;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+        }
+        .progress-container {
+            margin: 20px 0;
+        }
+        .progress {
+            width: 100%;
+            height: 20px;
+            background: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .progress-bar {
+            height: 100%;
+            background: #4a90e2;
+            width: 0%;
+            transition: width 0.3s ease;
+            background-image: linear-gradient(45deg, 
+                rgba(255,255,255,.15) 25%, transparent 25%,
+                transparent 50%, rgba(255,255,255,.15) 50%,
+                rgba(255,255,255,.15) 75%, transparent 75%,
+                transparent);
+            background-size: 40px 40px;
+            animation: progress-bar-stripes 1s linear infinite;
+        }
+        @keyframes progress-bar-stripes {
+            from { background-position: 40px 0; }
+            to { background-position: 0 0; }
         }
         .progress-text {
             text-align: center;
             margin-top: 5px;
             font-size: 0.9em;
             color: #666;
+        }
+        .detail-status {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        .loading { 
+            background: #fff3cd;
+            border-color: #ffeeba;
+            color: #856404;
+        }
+        .success { 
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .error { 
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .btn {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: 'Noto Serif TC', serif;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 120px;
+        }
+        .btn:hover {
+            background: #357abd;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .btn-danger {
+            background: #dc3545;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .button-group {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -26,124 +145,33 @@
             <button id="initBtn" class="btn" onclick="initApp()">檢查並載入資料</button>
             <button id="resetBtn" class="btn btn-danger" onclick="resetDatabase()">重設資料庫</button>
         </div>
-        <div class="progress">
-            <div id="progressBar" class="progress-bar"></div>
+        <div class="progress-container">
+            <div class="progress">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
+            <div id="progress-text" class="progress-text"></div>
         </div>
-        <div id="progress-text" class="progress-text"></div>
         <div id="status" class="status">請選擇操作</div>
         <div id="detail-status" class="detail-status"></div>
     </div>
 
     <script>
-        // 常數定義部分保持不變
-        const BATCH_SIZE = 1000; // 每批處理的數據量
+        const dbName = 'HSCodeDB';
+        const storeName = 'hscodes';
+        const favoriteStore = 'favorites';
+        const files = ['hs02.json', 'hs04.json', 'hs06.json', 'hs08.json', 'hs10.json'];
+        const BATCH_SIZE = 1000;
+        let db;
+        let loadedFiles = 0;
 
-        // 顯示詳細狀態
-        const showDetailStatus = (message) => {
-            document.getElementById('detail-status').textContent = message;
+        const deleteDatabase = () => {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.deleteDatabase(dbName);
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            });
         };
 
-        // 更新進度文字
-        const updateProgressText = (current, total, operation) => {
-            const percentage = Math.round((current / total) * 100);
-            document.getElementById('progress-text').textContent = 
-                `${operation}: ${current}/${total} (${percentage}%)`;
-        };
-
-        // 批次插入數據
-        const insertDataBatch = async (data) => {
-            const total = data.length;
-            let processed = 0;
-
-            for (let i = 0; i < total; i += BATCH_SIZE) {
-                const batch = data.slice(i, i + BATCH_SIZE);
-                await new Promise((resolve, reject) => {
-                    const transaction = db.transaction([storeName], 'readwrite');
-                    const store = transaction.objectStore(storeName);
-                    
-                    batch.forEach(item => {
-                        item.length = item.Code.length;
-                        store.put(item);
-                    });
-
-                    transaction.oncomplete = () => resolve();
-                    transaction.onerror = (e) => reject(e.target.error);
-                });
-
-                processed += batch.length;
-                const progress = (processed / total) * 100;
-                document.getElementById('progressBar').style.width = `${progress}%`;
-                updateProgressText(processed, total, '正在寫入數據');
-            }
-        };
-
-        // 重設資料庫
-        const resetDatabase = async () => {
-            if (!confirm('確定要重設資料庫嗎？這將刪除所有現有資料，包括收藏項目。')) {
-                return;
-            }
-
-            disableButtons();
-            try {
-                // 刪除資料庫
-                showStatus('正在刪除舊資料...', 'loading');
-                showDetailStatus('清除舊資料中...');
-                await deleteDatabase();
-                document.getElementById('progressBar').style.width = '0%';
-
-                // 重新初始化
-                showStatus('正在重新初始化...', 'loading');
-                showDetailStatus('建立新資料庫結構...');
-                await initDB();
-
-                // 載入新數據
-                await loadAllFiles();
-            } catch (error) {
-                showStatus('重設錯誤：' + error.message, 'error');
-                showDetailStatus(error.stack);
-                enableButtons();
-            }
-        };
-
-        // 載入所有JSON檔案
-        const loadAllFiles = async () => {
-            loadedFiles = 0;
-            let allData = [];
-            
-            try {
-                // 分階段載入文件
-                for (const file of files) {
-                    showStatus(`正在載入 ${file}...`, 'loading');
-                    showDetailStatus(`正在讀取 ${file}`);
-                    
-                    const response = await fetch(file);
-                    if (!response.ok) throw new Error(`無法載入 ${file}`);
-                    
-                    const data = await response.json();
-                    allData = allData.concat(data);
-                    
-                    loadedFiles++;
-                    const progress = (loadedFiles / files.length) * 50; // 前50%進度用於載入文件
-                    document.getElementById('progressBar').style.width = `${progress}%`;
-                    updateProgressText(loadedFiles, files.length, '載入文件');
-                }
-
-                // 寫入數據
-                showStatus('正在寫入數據...', 'loading');
-                await insertDataBatch(allData);
-
-                // 完成
-                showStatus('資料載入完成，即將轉向搜尋頁面...', 'success');
-                showDetailStatus('完成！');
-                setTimeout(() => window.location.href = 'index_search.html', 1500);
-            } catch (error) {
-                showStatus('載入錯誤：' + error.message, 'error');
-                showDetailStatus(error.stack);
-                enableButtons();
-            }
-        };
-
-        // 初始化資料庫（優化版）
         const initDB = () => {
             return new Promise((resolve, reject) => {
                 const request = indexedDB.open(dbName, 2);
@@ -177,7 +205,149 @@
             });
         };
 
-        // 其他輔助函數保持不變...
+        const checkData = async () => {
+            const transaction = db.transaction([storeName], 'readonly');
+            const store = transaction.objectStore(storeName);
+            const countRequest = store.count();
+
+            return new Promise(resolve => {
+                countRequest.onsuccess = () => resolve(countRequest.result > 0);
+            });
+        };
+
+        const insertDataBatch = async (data) => {
+            const total = data.length;
+            let processed = 0;
+
+            for (let i = 0; i < total; i += BATCH_SIZE) {
+                const batch = data.slice(i, i + BATCH_SIZE);
+                await new Promise((resolve, reject) => {
+                    const transaction = db.transaction([storeName], 'readwrite');
+                    const store = transaction.objectStore(storeName);
+                    
+                    batch.forEach(item => {
+                        item.length = item.Code.length;
+                        store.put(item);
+                    });
+
+                    transaction.oncomplete = () => resolve();
+                    transaction.onerror = (e) => reject(e.target.error);
+                });
+
+                processed += batch.length;
+                const progress = ((loadedFiles / files.length) * 50) + ((processed / total) * 50);
+                document.getElementById('progressBar').style.width = `${progress}%`;
+                updateProgressText(processed, total, '正在寫入數據');
+            }
+        };
+
+        const loadAllFiles = async () => {
+            loadedFiles = 0;
+            let allData = [];
+            
+            try {
+                for (const file of files) {
+                    showStatus(`正在載入 ${file}...`, 'loading');
+                    showDetailStatus(`正在讀取 ${file}`);
+                    
+                    const response = await fetch(file);
+                    if (!response.ok) throw new Error(`無法載入 ${file}`);
+                    
+                    const data = await response.json();
+                    allData = allData.concat(data);
+                    
+                    loadedFiles++;
+                    const progress = (loadedFiles / files.length) * 50;
+                    document.getElementById('progressBar').style.width = `${progress}%`;
+                    updateProgressText(loadedFiles, files.length, '載入文件');
+                }
+
+                showStatus('正在寫入數據...', 'loading');
+                await insertDataBatch(allData);
+
+                showStatus('資料載入完成，即將轉向搜尋頁面...', 'success');
+                showDetailStatus('完成！');
+                setTimeout(() => window.location.href = 'index_search.html', 1500);
+            } catch (error) {
+                showStatus('載入錯誤：' + error.message, 'error');
+                showDetailStatus(error.stack);
+                enableButtons();
+            }
+        };
+
+        const initApp = async () => {
+            disableButtons();
+            try {
+                await initDB();
+                const hasData = await checkData();
+                
+                if (hasData) {
+                    showStatus('資料庫已就緒，即將轉向搜尋頁面...', 'success');
+                    document.getElementById('progressBar').style.width = '100%';
+                    setTimeout(() => window.location.href = 'index_search.html', 1500);
+                } else {
+                    await loadAllFiles();
+                }
+            } catch (error) {
+                showStatus('初始化錯誤：' + error.message, 'error');
+                showDetailStatus(error.stack);
+                enableButtons();
+            }
+        };
+
+        const resetDatabase = async () => {
+            if (!confirm('確定要重設資料庫嗎？這將刪除所有現有資料，包括收藏項目。')) {
+                return;
+            }
+
+            disableButtons();
+            try {
+                showStatus('正在刪除舊資料...', 'loading');
+                showDetailStatus('清除舊資料中...');
+                await deleteDatabase();
+                document.getElementById('progressBar').style.width = '0%';
+
+                showStatus('正在重新初始化...', 'loading');
+                showDetailStatus('建立新資料庫結構...');
+                await initDB();
+
+                await loadAllFiles();
+            } catch (error) {
+                showStatus('重設錯誤：' + error.message, 'error');
+                showDetailStatus(error.stack);
+                enableButtons();
+            }
+        };
+
+        const showStatus = (message, type) => {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        };
+
+        const showDetailStatus = (message) => {
+            document.getElementById('detail-status').textContent = message;
+        };
+
+        const updateProgressText = (current, total, operation) => {
+            const percentage = Math.round((current / total) * 100);
+            document.getElementById('progress-text').textContent = 
+                `${operation}: ${current}/${total} (${percentage}%)`;
+        };
+
+        const disableButtons = () => {
+            document.getElementById('initBtn').disabled = true;
+            document.getElementById('resetBtn').disabled = true;
+        };
+
+        const enableButtons = () => {
+            document.getElementById('initBtn').disabled = false;
+            document.getElementById('resetBtn').disabled = false;
+        };
+
+        // 初始顯示
+        showStatus('請選擇操作', '');
+        showDetailStatus('系統就緒');
     </script>
 </body>
 </html>
