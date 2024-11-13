@@ -218,31 +218,46 @@
         }
 
         async function toggleFavorite(code, event) {
-            event.stopPropagation(); // 防止觸發父元素的點擊事件
+            event.stopPropagation();
             
-            const tx = db.transaction([storeName, favoriteStore], 'readwrite');
-            const hsStore = tx.objectStore(storeName);
-            const favStore = tx.objectStore(favoriteStore);
-            
-            const item = await new Promise(resolve => {
-                hsStore.get(code).onsuccess = (e) => resolve(e.target.result);
-            });
-
-            const isFav = await isFavorite(code);
-            if (isFav) {
-                favStore.delete(code);
-            } else {
-                favStore.put(item);
+            try {
+                // 先檢查當前收藏狀態
+                const isFav = await isFavorite(code);
+                
+                // 取得項目數據
+                const tx1 = db.transaction([storeName], 'readonly');
+                const hsStore = tx1.objectStore(storeName);
+                const item = await new Promise((resolve, reject) => {
+                    const request = hsStore.get(code);
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+        
+                // 新的交易處理收藏操作
+                const tx2 = db.transaction([favoriteStore], 'readwrite');
+                const favStore = tx2.objectStore(favoriteStore);
+                
+                await new Promise((resolve, reject) => {
+                    const request = isFav ? 
+                        favStore.delete(code) : 
+                        favStore.put(item);
+                    
+                    tx2.oncomplete = () => resolve();
+                    tx2.onerror = () => reject(tx2.error);
+                });
+        
+                // 更新 UI
+                const btn = document.querySelector(`[data-code="${code}"]`);
+                if (btn) {
+                    btn.classList.toggle('active');
+                    const icon = btn.querySelector('.material-icons');
+                    icon.textContent = isFav ? 'bookmark_border' : 'bookmark';
+                    btn.title = isFav ? '加入收藏' : '取消收藏';
+                }
+            } catch (error) {
+                console.error('收藏操作失敗:', error);
             }
-
-            const btn = document.querySelector(`[data-code="${code}"]`);
-            if (btn) {
-                btn.classList.toggle('active');
-                const icon = btn.querySelector('.material-icons');
-                icon.textContent = isFav ? 'bookmark_border' : 'bookmark';
-            }
-        }
-
+        }        
         async function showFavorites() {
             const tx = db.transaction(favoriteStore, 'readonly');
             const store = tx.objectStore(favoriteStore);
