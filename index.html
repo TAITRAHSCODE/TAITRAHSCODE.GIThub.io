@@ -2,35 +2,38 @@
 <html>
 <head>
     <title>HS Code Data Loader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body { 
-            font-family: Arial; 
+            font-family: Arial, sans-serif; 
             padding: 20px; 
             max-width: 800px; 
-            margin: 0 auto; 
+            margin: 0 auto;
+            line-height: 1.6;
         }
         .status {
-            padding: 10px;
+            padding: 15px;
             margin: 10px 0;
-            border-radius: 4px;
+            border-radius: 8px;
+            background: #f5f5f5;
         }
-        .success { background: #e6ffe6; }
-        .loading { background: #fff3e6; }
-        .error { background: #ffe6e6; }
         .progress {
             width: 100%;
             height: 20px;
-            background-color: #f0f0f0;
+            background: #eee;
             border-radius: 10px;
-            margin: 10px 0;
             overflow: hidden;
+            margin: 20px 0;
         }
         .progress-bar {
             height: 100%;
-            background-color: #4CAF50;
+            background: #4a90e2;
             width: 0%;
-            transition: width 0.3s ease;
+            transition: width 0.3s;
         }
+        .loading { background: #fff3cd; }
+        .success { background: #d4edda; }
+        .error { background: #f8d7da; }
     </style>
 </head>
 <body>
@@ -41,63 +44,58 @@
     <div id="status" class="status"></div>
 
     <script>
-        let db;
+        // 常數定義
         const dbName = 'HSCodeDB';
         const storeName = 'hscodes';
+        const favoriteStore = 'favorites';
         const files = ['hs02.json', 'hs04.json', 'hs06.json', 'hs08.json'];
+        let db;
         let loadedFiles = 0;
 
-        // const initDB = () => {
-        //     return new Promise((resolve, reject) => {
-        //         const request = indexedDB.open(dbName, 1);
-                
-        //         request.onerror = () => reject(request.error);
-        //         request.onsuccess = () => {
-        //             db = request.result;
-        //             checkData();
-        //             resolve(db);
-        //         };
-                
-        //         request.onupgradeneeded = (e) => {
-        //             const db = e.target.result;
-        //             if (!db.objectStoreNames.contains(storeName)) {
-        //                 const store = db.createObjectStore(storeName, { keyPath: 'Code' });
-        //                 store.createIndex('length', 'length', { unique: false });
-        //             }
-        //         };
-        //     });
-        // };
+        // 初始化資料庫
         const initDB = () => {
-            // 先檢查現有版本
-            const checkRequest = indexedDB.open(dbName);
-            checkRequest.onsuccess = (event) => {
-                const existingVersion = event.target.result.version;
-                event.target.result.close();
+            return new Promise((resolve, reject) => {
+                // 先檢查現有版本
+                const checkRequest = indexedDB.open(dbName);
                 
-                // 用正確的版本號開啟資料庫
-                const request = indexedDB.open(dbName, Math.max(existingVersion, 2));
-                
-                request.onupgradeneeded = (e) => {
-                    const db = e.target.result;
-                    if (!db.objectStoreNames.contains(favoriteStore)) {
-                        db.createObjectStore(favoriteStore, { keyPath: 'Code' });
-                    }
+                checkRequest.onsuccess = (event) => {
+                    const currentDb = event.target.result;
+                    const existingVersion = currentDb.version;
+                    currentDb.close();
+                    
+                    // 用更高的版本號重新開啟
+                    const request = indexedDB.open(dbName, Math.max(existingVersion, 2));
+                    
+                    request.onupgradeneeded = (e) => {
+                        const db = e.target.result;
+                        if (!db.objectStoreNames.contains(storeName)) {
+                            db.createObjectStore(storeName, { keyPath: 'Code' });
+                        }
+                        if (!db.objectStoreNames.contains(favoriteStore)) {
+                            db.createObjectStore(favoriteStore, { keyPath: 'Code' });
+                        }
+                    };
+
+                    request.onsuccess = (e) => {
+                        db = e.target.result;
+                        console.log("Database ready");
+                        resolve(db);
+                    };
+
+                    request.onerror = (e) => {
+                        console.error("Database error:", e.target.error);
+                        reject(e.target.error);
+                    };
                 };
-        
-                request.onsuccess = () => {
-                    db = request.result;
-                    console.log("Database ready");
+
+                checkRequest.onerror = (e) => {
+                    console.error("Error checking database version:", e.target.error);
+                    reject(e.target.error);
                 };
-        
-                request.onerror = () => {
-                    console.error("Database error:", request.error);
-                };
-            };
-        
-            checkRequest.onerror = () => {
-                console.error("Error checking database version");
-            };
+            });
         };
+
+        // 檢查資料是否存在
         const checkData = async () => {
             const transaction = db.transaction([storeName], 'readonly');
             const store = transaction.objectStore(storeName);
@@ -106,7 +104,7 @@
             countRequest.onsuccess = async () => {
                 if (countRequest.result > 0) {
                     showStatus('資料庫已就緒，即將轉向搜尋頁面...', 'success');
-                    setTimeout(() => window.location.href = 'index_search.html', 1500);
+                    setTimeout(() => window.location.href = 'search.html', 1500);
                 } else {
                     showStatus('開始載入資料...', 'loading');
                     await loadAllFiles();
@@ -114,6 +112,7 @@
             };
         };
 
+        // 載入所有JSON檔案
         const loadAllFiles = async () => {
             try {
                 let allData = [];
@@ -129,12 +128,14 @@
                 }
                 await insertData(allData);
                 showStatus('資料載入完成，即將轉向搜尋頁面...', 'success');
-                setTimeout(() => window.location.href = 'index_search.html', 1500);
+                setTimeout(() => window.location.href = 'search.html', 1500);
             } catch (error) {
                 showStatus('載入錯誤：' + error.message, 'error');
+                console.error('Loading error:', error);
             }
         };
 
+        // 插入資料
         const insertData = (data) => {
             return new Promise((resolve, reject) => {
                 const transaction = db.transaction([storeName], 'readwrite');
@@ -146,24 +147,36 @@
                 });
 
                 transaction.oncomplete = () => resolve();
-                transaction.onerror = () => reject(transaction.error);
+                transaction.onerror = (e) => reject(e.target.error);
             });
         };
 
+        // 顯示狀態
         const showStatus = (message, type) => {
             const status = document.getElementById('status');
             status.textContent = message;
-            status.className = 'status ' + type;
+            status.className = `status ${type}`;
         };
 
+        // 更新進度條
         const updateProgress = () => {
             const progress = (loadedFiles / files.length) * 100;
             document.getElementById('progressBar').style.width = `${progress}%`;
         };
 
-        initDB().catch(error => {
-            showStatus('資料庫錯誤：' + error.message, 'error');
-        });
+        // 初始化應用
+        const initApp = async () => {
+            try {
+                await initDB();
+                await checkData();
+            } catch (error) {
+                showStatus('初始化錯誤：' + error.message, 'error');
+                console.error('Initialization error:', error);
+            }
+        };
+
+        // 啟動應用
+        initApp();
     </script>
 </body>
 </html>
