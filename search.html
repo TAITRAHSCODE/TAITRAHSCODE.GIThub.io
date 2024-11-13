@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HS Code Search</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            padding: 20px; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+        }
+        .search-container {
+            margin: 20px 0;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+        .result-item {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .parent-item {
+            margin: 5px 0;
+            padding: 5px;
+            background: #f5f5f5;
+            font-size: 0.9em;
+        }
+        .highlight {
+            background: yellow;
+        }
+        .code { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="輸入代碼、中文或英文關鍵字搜尋...">
+    </div>
+    <div id="results"></div>
+
+    <script>
+        let db;
+        const dbName = 'HSCodeDB';
+        const storeName = 'hscodes';
+
+        // 初始化數據庫
+        const initDB = () => {
+            const request = indexedDB.open(dbName, 1);
+            request.onerror = () => console.error("Database error:", request.error);
+            request.onsuccess = () => {
+                db = request.result;
+                console.log("Database ready");
+            };
+        };
+
+        // 搜尋功能
+        async function search(query) {
+            if (!query) {
+                document.getElementById('results').innerHTML = '';
+                return;
+            }
+
+            const tx = db.transaction(storeName, 'readonly');
+            const store = tx.objectStore(storeName);
+            const allRecords = await getAllRecords(store);
+            
+            let results = [];
+            const isNumeric = /^\d+$/.test(query);
+            query = query.toLowerCase();
+
+            results = allRecords.filter(record => {
+                if (isNumeric) {
+                    return record.Code.startsWith(query);
+                } else {
+                    return record.Code.includes(query) ||
+                           record.CnyChinese.toLowerCase().includes(query) ||
+                           record.CnyEnglish.toLowerCase().includes(query);
+                }
+            });
+
+            // 排序結果（代碼短的優先）
+            results.sort((a, b) => a.Code.length - b.Code.length);
+
+            // 找出父節點
+            results = await Promise.all(results.map(async r => ({
+                ...r,
+                parents: await getParentNodes(r.Code, allRecords)
+            })));
+
+            displayResults(results, query);
+        }
+
+        // 獲取所有記錄
+        function getAllRecords(store) {
+            return new Promise((resolve) => {
+                const records = [];
+                store.openCursor().onsuccess = (event) => {
+                    const cursor = event.target.result;
+                    if (cursor) {
+                        records.push(cursor.value);
+                        cursor.continue();
+                    } else {
+                        resolve(records);
+                    }
+                };
+            });
+        }
+
+        // 獲取父節點
+        async function getParentNodes(code, allRecords) {
+            const parents = [];
+            for (let i = 2; i < code.length; i += 2) {
+                const parentCode = code.substring(0, i);
+                const parent = allRecords.find(r => r.Code === parentCode);
+                if (parent) parents.push(parent);
+            }
+            return parents;
+        }
+
+        // 顯示結果
+        function displayResults(results, query) {
+            const resultsDiv = document.getElementById('results');
+            if (results.length === 0) {
+                resultsDiv.innerHTML = '<div class="result-item">沒有找到相關記錄</div>';
+                return;
+            }
+
+            resultsDiv.innerHTML = results.map(result => `
+                <div class="result-item">
+                    <div class="code">${result.Code} - 
+                        ${highlightText(result.CnyChinese, query)} / 
+                        ${highlightText(result.CnyEnglish, query)}
+                    </div>
+                    ${result.parents.map(parent => `
+                        <div class="parent-item">
+                            ↳ ${parent.Code} - ${parent.CnyChinese} / ${parent.CnyEnglish}
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('');
+        }
+
+        // 高亮搜尋文字
+        function highlightText(text, query) {
+            if (/^\d+$/.test(query)) return text;
+            const regex = new RegExp(query, 'gi');
+            return text.replace(regex, match => `<span class="highlight">${match}</span>`);
+        }
+
+        // 初始化頁面
+        initDB();
+
+        // 搜尋事件監聽
+        document.getElementById('searchInput').addEventListener('input', 
+            debounce(e => search(e.target.value.trim()), 300)
+        );
+
+        // Debounce 函數
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+    </script>
+</body>
+</html>
