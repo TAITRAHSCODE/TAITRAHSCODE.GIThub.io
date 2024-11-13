@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新聞網站字體示範</title>
+    
+    <!-- 預載入字體 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .news-title {
+            color: #333;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .news-content {
+            font-size: 21px;
+            line-height: 35px;
+            text-align: justify;
+            letter-spacing: 2.5px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* 字體載入後的樣式 */
+        .fonts-loaded .news-content {
+            font-family: 'Noto Serif TC', sans-serif;
+        }
+
+        .font-info {
+            margin-top: 30px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        #fontStatus {
+            font-family: monospace;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="news-title">德國辯掉自由派對 紀念柏林圍牆倒塌35週年</h1>
+        
+        <div class="news-content">
+            對中共直接的侵略壓力，中國議題從來都不是什麼迫切必須解決的問題，自然有許多人對中國政策不甚了解。而在內政議題上面的面向非常多，當然不可能完全同意某個政客的所有主張。可惜的是，有些人常常把批評川普國內政策，直接上綱到反對制裁中國，這其實是很大的誤區。
+        </div>
+        
+        <div class="news-content">
+            重點在於，美國的兩大黨從來都不是用外交政策來區分的，更不是用中國政策來分的。各黨執政時期，也不可能完全地親中或反中，只有手段和程度上的不同。參考：《台美關係當中常見的迷思》。
+        </div>
+
+        <div class="font-info">
+            <p>當前字體狀態：<span id="fontStatus">檢查中...</span></p>
+        </div>
+    </div>
+
+    <script>
+        // 檢查字體載入
+        document.fonts.ready.then(() => {
+            document.documentElement.classList.add('fonts-loaded');
+            
+            // 獲取實際使用的字體
+            const testElement = document.querySelector('.news-content');
+            const computedStyle = window.getComputedStyle(testElement);
+            
+            document.getElementById('fontStatus').textContent = 
+                `使用中的字體：${computedStyle.fontFamily}
+                行高：${computedStyle.lineHeight}
+                字距：${computedStyle.letterSpacing}
+                字體大小：${computedStyle.fontSize}`;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HS Code Manager</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            padding: 20px; 
+            max-width: 800px; 
+            margin: 0 auto; 
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background: #e6ffe6; }
+        .loading { background: #fff3e6; }
+        .error { background: #ffe6e6; }
+    </style>
+</head>
+<body>
+    <h2>HS Code Manager</h2>
+    <div id="status" class="status"></div>
+
+    <script>
+        let db;
+        const dbName = 'HSCodeDB';
+        const storeName = 'hscodes';
+        const files = ['hs02.json', 'hs04.json', 'hs06.json', 'hs08.json'];
+
+        // IndexedDB初始化
+        const initDB = () => {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(dbName, 1);
+                
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    db = request.result;
+                    checkData();
+                    resolve(db);
+                };
+                
+                request.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains(storeName)) {
+                        const store = db.createObjectStore(storeName, { keyPath: 'Code' });
+                        store.createIndex('length', 'length', { unique: false });
+                    }
+                };
+            });
+        };
+
+        // 檢查資料是否存在
+        const checkData = async () => {
+            const transaction = db.transaction([storeName], 'readonly');
+            const store = transaction.objectStore(storeName);
+            const countRequest = store.count();
+
+            countRequest.onsuccess = async () => {
+                if (countRequest.result > 0) {
+                    showStatus('資料庫已就緒，共有 ' + countRequest.result + ' 筆資料', 'success');
+                } else {
+                    showStatus('正在載入 HS Code 檔案...', 'loading');
+                    await loadAllFiles();
+                }
+            };
+        };
+
+        // 載入所有JSON檔案
+        const loadAllFiles = async () => {
+            try {
+                let allData = [];
+                for (const file of files) {
+                    showStatus(`正在載入 ${file}...`, 'loading');
+                    const response = await fetch(file);
+                    if (!response.ok) throw new Error(`無法載入 ${file}`);
+                    const data = await response.json();
+                    allData = allData.concat(data);
+                }
+                await insertData(allData);
+                showStatus('所有資料載入完成', 'success');
+            } catch (error) {
+                showStatus('載入錯誤：' + error.message, 'error');
+            }
+        };
+
+        // 插入資料
+        const insertData = (data) => {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([storeName], 'readwrite');
+                const store = transaction.objectStore(storeName);
+                
+                data.forEach(item => {
+                    item.length = item.Code.length;
+                    store.put(item);
+                });
+
+                transaction.oncomplete = () => resolve();
+                transaction.onerror = () => reject(transaction.error);
+            });
+        };
+
+        // 顯示狀態
+        const showStatus = (message, type) => {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = 'status ' + type;
+        };
+
+        // 啟動應用
+        initDB().catch(error => {
+            showStatus('資料庫錯誤：' + error.message, 'error');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,487 @@
+[
+  {
+    "Code": "01",
+    "CnyChinese": "活動物",
+    "CnyEnglish": "Live Animals"
+  },
+  {
+    "Code": "02",
+    "CnyChinese": "肉及食用雜碎",
+    "CnyEnglish": "Meat And Edible Meat Offal"
+  },
+  {
+    "Code": "03",
+    "CnyChinese": "魚類、甲殼類、軟體類及其他水產無脊椎動物",
+    "CnyEnglish": "Fish And Crustaceans, Molluscs And Other Acquatic Invertebrates"
+  },
+  {
+    "Code": "04",
+    "CnyChinese": "乳製品；禽蛋；天然蜜；未列名食用動物產品",
+    "CnyEnglish": "Dairy Produce; Birds' Eggs; Natural Honey; Edible Products Of Animal Origin, Not Elsewhere Specified Or Included"
+  },
+  {
+    "Code": "05",
+    "CnyChinese": "未列名動物產品",
+    "CnyEnglish": "Products Of Animal Origin, Not Elsewhere Specified Or Included"
+  },
+  {
+    "Code": "06",
+    "CnyChinese": "活樹及其他植物；球莖、根及類似品；切花及裝飾用葉",
+    "CnyEnglish": "Live Trees And Other Plants; Bulbs, Roots And The Like; Cut Flowers And Ornamental Foliage"
+  },
+  {
+    "Code": "07",
+    "CnyChinese": "食用蔬菜及部分根菜與塊莖菜類",
+    "CnyEnglish": "Edible Vegetables And Certain Roots And Tubers"
+  },
+  {
+    "Code": "08",
+    "CnyChinese": "食用果實及堅果；柑橘屬果實或甜瓜之外皮",
+    "CnyEnglish": "Edible Fruit And Nuts; Peel Of Citrus Fruit Or Melons"
+  },
+  {
+    "Code": "09",
+    "CnyChinese": "咖啡、茶、馬黛茶及香料",
+    "CnyEnglish": "Coffee, Tea, Mate And Spices"
+  },
+  {
+    "Code": "10",
+    "CnyChinese": "穀類",
+    "CnyEnglish": "Cereals"
+  },
+  {
+    "Code": "11",
+    "CnyChinese": "製粉工業產品；麥芽；澱粉；菊糖；麵筋",
+    "CnyEnglish": "Products Of The Milling Industry; Malt; Starches; Inulin; Wheat Gluten"
+  },
+  {
+    "Code": "12",
+    "CnyChinese": "油料種子及含油質果實；雜項穀粒、種子及果實；工業用或藥用植物；芻草及飼料",
+    "CnyEnglish": "Oil Seeds And Oleaginous Fruits; Miscellaneous Grains, Seeds And Fruit; Industrial Or Medical Plants; Straw And Fodder"
+  },
+  {
+    "Code": "13",
+    "CnyChinese": "蟲漆；植物膠、樹脂、其他植物汁液及萃取物",
+    "CnyEnglish": "Lac; Gums, Resins And Other Vegetable Saps And Extracts"
+  },
+  {
+    "Code": "14",
+    "CnyChinese": "編結用植物性材料；未列名植物產品",
+    "CnyEnglish": "Vegetable Plaiting Materials; Vegetable Products Not Elsewhere Specified Or Included"
+  },
+  {
+    "Code": "15",
+    "CnyChinese": "動植物或微生物油脂及其分解物；調製食用油脂；動植物蠟",
+    "CnyEnglish": "Animal, Vegetable Or Microbial Fats And Oils And Their Cleavage Products; Prepared Edible Fats; Animal Or Vegetable Waxes"
+  },
+  {
+    "Code": "16",
+    "CnyChinese": "肉、魚類、甲殼類、軟體類、其他水產無脊椎動物或昆蟲等之調製品",
+    "CnyEnglish": "Preparations Of Meat, Of Fish, Of Crustaceans, Molluscs Or Other Aquatic Invertebrates, Or Of Insects"
+  },
+  {
+    "Code": "17",
+    "CnyChinese": "糖及糖果",
+    "CnyEnglish": "Sugars And Sugar Confectionery"
+  },
+  {
+    "Code": "18",
+    "CnyChinese": "可可及可可製品",
+    "CnyEnglish": "Cocoa And Cocoa Preparations"
+  },
+  {
+    "Code": "19",
+    "CnyChinese": "穀類、粉、澱粉或奶之調製食品；糕餅類食品",
+    "CnyEnglish": "Preparations Of Cereals, Flour, Starch Or Milk; Pastrycooks' Products"
+  },
+  {
+    "Code": "20",
+    "CnyChinese": "蔬菜、果實、堅果或植物其他部分之調製品",
+    "CnyEnglish": "Preparations Of Vegetables, Fruit, Nuts Or Other Parts Of Plants"
+  },
+  {
+    "Code": "21",
+    "CnyChinese": "雜項調製食品",
+    "CnyEnglish": "Miscellaneous Edible Preparations"
+  },
+  {
+    "Code": "22",
+    "CnyChinese": "飲料、酒類及醋",
+    "CnyEnglish": "Beverages, Spirits And Vinegar"
+  },
+  {
+    "Code": "23",
+    "CnyChinese": "食品工業產製過程之殘渣及廢品；調製動物飼料",
+    "CnyEnglish": "Residues And Waste From The Food Industries; Prepared Animal Fodder"
+  },
+  {
+    "Code": "24",
+    "CnyChinese": "菸類及已製菸類代用品；以非燃燒方式吸入之產品，無論是否含尼古丁；其他供人攝入尼古丁之含尼古丁產品",
+    "CnyEnglish": "Tobacco And Manufactured Tobacco Substitutes; Products, Whether Or Not Containing Nicotine, Intended For Inhalation Without Combustion; Other Nicotine Containing Products Intended For The Intake Of Nicotine Into The Human Body"
+  },
+  {
+    "Code": "25",
+    "CnyChinese": "鹽；硫磺；泥土及石料；石膏料；石灰及水泥",
+    "CnyEnglish": "Salt; Sulphur; Earths And Stone; Plastering Materials, Lime And Cement"
+  },
+  {
+    "Code": "26",
+    "CnyChinese": "礦石、熔渣及礦灰",
+    "CnyEnglish": "Ores, Slag And Ash"
+  },
+  {
+    "Code": "27",
+    "CnyChinese": "礦物燃料、礦油及其蒸餾產品；含瀝青物質；礦蠟",
+    "CnyEnglish": "Mineral Fuels, Mineral Oils And Products Of Their Distillation; Bituminous Substances; Mineral Waxes"
+  },
+  {
+    "Code": "28",
+    "CnyChinese": "無機化學品；貴金屬、稀土金屬、放射性元素及其同位素之有機及無機化合物",
+    "CnyEnglish": "Inorganic Chemicals; Organic Or Inorganic Compounds Of Precious Metals, Of Rare-Earth Metals, Of Radioactive Elements Or Of Isotopes"
+  },
+  {
+    "Code": "29",
+    "CnyChinese": "有機化學產品",
+    "CnyEnglish": "Organic Chemicals"
+  },
+  {
+    "Code": "30",
+    "CnyChinese": "醫藥品",
+    "CnyEnglish": "Pharmaceutical Products"
+  },
+  {
+    "Code": "31",
+    "CnyChinese": "肥料",
+    "CnyEnglish": "Fertilisers"
+  },
+  {
+    "Code": "32",
+    "CnyChinese": "鞣革或染色用萃取物；鞣酸及其衍生物；染料、顏料及其他著色料；漆類及凡立水；油灰及其他灰泥；墨類",
+    "CnyEnglish": "Tanning Or Dyeing Extracts; Tannins And Their Derivatives; Dyes, Pigments And Other Colouring Matter; Paints And Varnishes; Putty And Other Mastics; Inks"
+  },
+  {
+    "Code": "33",
+    "CnyChinese": "精油及樹脂狀物質；香水、化粧品或盥洗用品",
+    "CnyEnglish": "Essential Oils And Resinoids; Perfumery, Cosmetics Or Toilet Preparations"
+  },
+  {
+    "Code": "34",
+    "CnyChinese": "肥皂，有機界面活性劑，洗滌劑，潤滑劑，人造蠟，配製蠟，擦光或除垢劑，蠟燭及類似品，塑型用軟膏，「牙科用蠟」以及石膏為基料之牙科用劑",
+    "CnyEnglish": "Soap, Organic Surface-Active Agents, Washing Preparations, Lubricating Preparations, Artificial Waxes, Prepared Waxes, Polishing Or Scouring Preparations, Candles And Similar Articles, Modeling Pastes, \"Dental Waxes\" And Dental Preparations With A Basis Of Plaster"
+  },
+  {
+    "Code": "35",
+    "CnyChinese": "蛋白狀物質；改質澱粉；膠；酵素",
+    "CnyEnglish": "Albuminoidal Substances; Modified Starches; Glues; Enzymes"
+  },
+  {
+    "Code": "36",
+    "CnyChinese": "炸藥；煙火品；火柴；引火合金；可燃製品",
+    "CnyEnglish": "Explosives; Pyrotechnic Products; Matches; Pyrophoric Alloys; Certain Combustible Preparations"
+  },
+  {
+    "Code": "37",
+    "CnyChinese": "感光或電影用品",
+    "CnyEnglish": "Photographic Or Cinematographic Goods"
+  },
+  {
+    "Code": "38",
+    "CnyChinese": "雜項化學產品",
+    "CnyEnglish": "Miscellaneous Chemical Products"
+  },
+  {
+    "Code": "39",
+    "CnyChinese": "塑膠及其製品",
+    "CnyEnglish": "Plastics And Articles Thereof"
+  },
+  {
+    "Code": "40",
+    "CnyChinese": "橡膠及其製品",
+    "CnyEnglish": "Rubber And Articles Thereof"
+  },
+  {
+    "Code": "41",
+    "CnyChinese": "生皮（毛皮除外）及皮革",
+    "CnyEnglish": "Raw Hides And Skins (Other Than Furskins) And Leather"
+  },
+  {
+    "Code": "42",
+    "CnyChinese": "皮革製品；鞍具及輓具；旅行用物品、手提袋及類似容器；動物腸製品（蠶腸除外）",
+    "CnyEnglish": "Articles Of Leather; Saddlery And Harness; Travel Goods, Handbags And Similar Containers; Articles Of Animal Gut (Other Than Silk-Worm Gut)"
+  },
+  {
+    "Code": "43",
+    "CnyChinese": "毛皮與人造毛皮及其製品",
+    "CnyEnglish": "Furskins And Artificial Fur; Manufactures Thereof"
+  },
+  {
+    "Code": "44",
+    "CnyChinese": "木及木製品；木炭",
+    "CnyEnglish": "Wood And Articles Of Wood; Wood Charcoal"
+  },
+  {
+    "Code": "45",
+    "CnyChinese": "軟木及軟木製品",
+    "CnyEnglish": "Cork And Articles Of Cork"
+  },
+  {
+    "Code": "46",
+    "CnyChinese": "草及其他編結材料之編結品；編籃及柳條編結品",
+    "CnyEnglish": "Manufactures Of Straw Of Esparto And Of Other Plaiting Materials; Basketware Andd Wickerwork"
+  },
+  {
+    "Code": "47",
+    "CnyChinese": "木漿或其他纖維素材料之紙漿；回收（廢料及碎屑）紙或紙板",
+    "CnyEnglish": "Pulp Of Wood Or Of Other Fibrous Cellulosic Material; (Waste And Scrap ) Paper Or Paperboard"
+  },
+  {
+    "Code": "48",
+    "CnyChinese": "紙及紙板；紙漿、紙或紙板之製品",
+    "CnyEnglish": "Paper And Paperboard; Articles Of Paper Pulp, Of Paper Or Of Paperboard"
+  },
+  {
+    "Code": "49",
+    "CnyChinese": "書籍，新聞報紙，圖書及其他印刷工業產品；手寫稿、打字稿及設計圖樣",
+    "CnyEnglish": "Printed Books, Newspapers, Pictures And Other Products Of The Printing Industry; Manuscripts, Typescripts And Plans"
+  },
+  {
+    "Code": "50",
+    "CnyChinese": "絲",
+    "CnyEnglish": "Silk"
+  },
+  {
+    "Code": "51",
+    "CnyChinese": "羊毛，動物粗細毛；馬毛紗及其梭織物",
+    "CnyEnglish": "Wool, Fine Or Coarse Animal Hair; Horsehair Yarn And Woven Fabric"
+  },
+  {
+    "Code": "52",
+    "CnyChinese": "棉花",
+    "CnyEnglish": "Cotton"
+  },
+  {
+    "Code": "53",
+    "CnyChinese": "其他植物紡織纖維；紙紗及紙紗梭織物",
+    "CnyEnglish": "Other Vegetable Textile Fibres; Paper Yarn And Woven Fabrics Of Paper Yarn"
+  },
+  {
+    "Code": "54",
+    "CnyChinese": "人造纖維絲；人造紡織材料之扁條及類似品",
+    "CnyEnglish": "Man-Made Filaments; Strip And The Like Of Man-Made Textile Materials"
+  },
+  {
+    "Code": "55",
+    "CnyChinese": "人造纖維棉",
+    "CnyEnglish": "Man-Made Staple Fibres"
+  },
+  {
+    "Code": "56",
+    "CnyChinese": "填充用材料、氈呢、不織布；特種紗；撚線、繩、索、纜及其製品",
+    "CnyEnglish": "Wadding, Felt And Nonwovens; Special Yarns; Twine, Cordage, Ropes And Cables And Articles Thereof"
+  },
+  {
+    "Code": "57",
+    "CnyChinese": "地毯及其他紡織材料覆地物",
+    "CnyEnglish": "Carpets And Other Textile Floor Coverings"
+  },
+  {
+    "Code": "58",
+    "CnyChinese": "特殊梭織物；簇絨織物；花邊織物；掛毯；裝飾織物；刺繡織物",
+    "CnyEnglish": "Special Woven Fabrics; Tufted Textile Fabrics; Lace; Tapestries; Trimmings; Embroidery"
+  },
+  {
+    "Code": "59",
+    "CnyChinese": "浸漬、塗佈、被覆或黏合之紡織物；工業用紡織物",
+    "CnyEnglish": "Impregnated, Coated, Covered Or Laminated Textile Fabrics; Textile Articles Of A Kind Suitable For Industrial Use"
+  },
+  {
+    "Code": "60",
+    "CnyChinese": "針織品或鉤針織品",
+    "CnyEnglish": "Knitted Or Crocheted Fabrics"
+  },
+  {
+    "Code": "61",
+    "CnyChinese": "針織或鉤針織之衣著及服飾附屬品",
+    "CnyEnglish": "Articles Of Apparel And Clothing Accessories, Knitted Or Crocheted"
+  },
+  {
+    "Code": "62",
+    "CnyChinese": "非針織及非鉤針織之衣著及服飾附屬品",
+    "CnyEnglish": "Articles Of Apparel And Clothing Accessories, Not Knitted Or Crocheted"
+  },
+  {
+    "Code": "63",
+    "CnyChinese": "其他製成紡織品；組合品；舊衣著及舊紡織品；破布",
+    "CnyEnglish": "Other Made Up Textile Articles; Sets; Worn Clothing And Worn Textile Articles; Rags"
+  },
+  {
+    "Code": "64",
+    "CnyChinese": "鞋靴、綁腿及類似品；此類物品之零件",
+    "CnyEnglish": "Footwear, Gaiters And The Like; Parts Of Such Articles"
+  },
+  {
+    "Code": "65",
+    "CnyChinese": "帽類及其零件",
+    "CnyEnglish": "Headgear And Parts Thereof"
+  },
+  {
+    "Code": "66",
+    "CnyChinese": "雨傘、陽傘、手杖、座凳式手杖、鞭、馬鞭及其零件",
+    "CnyEnglish": "Umbrellas, Sun Umbrellas, Walking-Sticks, Seat-Sticks, Whips, Riding-Crops And Parts Thereof"
+  },
+  {
+    "Code": "67",
+    "CnyChinese": "已整理之羽毛、羽絨及其製品；人造花；人髮製品",
+    "CnyEnglish": "Prepared Feathers And Down And Articles Made Of Feathers Or Of Down; Artificial Flower; Articles Of Human Hair"
+  },
+  {
+    "Code": "68",
+    "CnyChinese": "石料、膠泥、水泥、石棉、雲母或類似材料之製品",
+    "CnyEnglish": "Articles Of Stone, Plaster, Cement, Asbestos, Mica Or Similar Materials"
+  },
+  {
+    "Code": "69",
+    "CnyChinese": "陶瓷產品",
+    "CnyEnglish": "Ceramic Products"
+  },
+  {
+    "Code": "70",
+    "CnyChinese": "玻璃及玻璃器",
+    "CnyEnglish": "Glass And Glassware"
+  },
+  {
+    "Code": "71",
+    "CnyChinese": "天然珍珠或養珠、寶石或次寶石、貴金屬、被覆貴金屬之金屬及其製品；仿首飾；鑄幣",
+    "CnyEnglish": "Natural Or Cultured Pearls, Precious Or Semi-Precious Stones, Precious Metals, Metals Clad With Precious Metals, And Articles Thereof; Imitation Jewellery; Coin"
+  },
+  {
+    "Code": "72",
+    "CnyChinese": "鋼鐵",
+    "CnyEnglish": "Iron And Steel"
+  },
+  {
+    "Code": "73",
+    "CnyChinese": "鋼鐵製品",
+    "CnyEnglish": "Articles Of Iron Or Steel"
+  },
+  {
+    "Code": "74",
+    "CnyChinese": "銅及其製品",
+    "CnyEnglish": "Copper And Articles Thereof"
+  },
+  {
+    "Code": "75",
+    "CnyChinese": "鎳及其製品",
+    "CnyEnglish": "Nickel And Articles Thereof"
+  },
+  {
+    "Code": "76",
+    "CnyChinese": "鋁及其製品",
+    "CnyEnglish": "Aluminium And Articles Thereof"
+  },
+  {
+    "Code": "78",
+    "CnyChinese": "鉛及其製品",
+    "CnyEnglish": "Lead And Articles Thereof"
+  },
+  {
+    "Code": "79",
+    "CnyChinese": "鋅及其製品",
+    "CnyEnglish": "Zinc And Articles Thereof"
+  },
+  {
+    "Code": "80",
+    "CnyChinese": "錫及其製品",
+    "CnyEnglish": "Tin And Articles Thereof"
+  },
+  {
+    "Code": "81",
+    "CnyChinese": "其他卑金屬；瓷金；及其製品",
+    "CnyEnglish": "Other Base Metals; Cermets; Articles Thereof"
+  },
+  {
+    "Code": "82",
+    "CnyChinese": "卑金屬製工具、器具、利器、匙、叉及其零件",
+    "CnyEnglish": "Tools, Implements, Cutlery, Spoons And Forks, Of Base Metal; Parts Thereof Of Base Metal"
+  },
+  {
+    "Code": "83",
+    "CnyChinese": "雜項卑金屬製品",
+    "CnyEnglish": "Miscellaneous Articles Of Base Metal"
+  },
+  {
+    "Code": "84",
+    "CnyChinese": "核子反應器、鍋爐、機器及機械用具；及其零件",
+    "CnyEnglish": "Nuclear Reactors, Boilers, Machinery And Mechanical Appliances; Parts Thereof"
+  },
+  {
+    "Code": "85",
+    "CnyChinese": "電機與設備及其零件；錄音機及聲音重放機；電視影像、聲音記錄機及重放機；以及上述各物之零件及附件",
+    "CnyEnglish": "Electrical Machinery And Equipment And Parts Thereof; Sound Recorders And Reproducers, Television Image And Sound Recorders And Reproducers, And Parts And Accessories Of Such Articles"
+  },
+  {
+    "Code": "86",
+    "CnyChinese": "鐵道或電車道機車、車輛及其零件；鐵道或電車道軌道固定設備及配件與零件；各種機械式（包括電動機械）交通信號設備",
+    "CnyEnglish": "Railway Or Tramway Locomotives, Rolling-Stock And Parts Thereof; Railway Or Tramway Track Fixtures And Fittings And Parts Thereof; Mechanical (Including Electromechanical) Traffic Signaling Equipment Of All Kinds"
+  },
+  {
+    "Code": "87",
+    "CnyChinese": "鐵道及電車道車輛以外之車輛及其零件與附件",
+    "CnyEnglish": "Vehicles Other Than Railway Or Tramway Rolling-Stock, And Parts And Accessories Thereof"
+  },
+  {
+    "Code": "88",
+    "CnyChinese": "航空器、太空船及其零件",
+    "CnyEnglish": "Aircraft, Spacecraft And Parts Thereof"
+  },
+  {
+    "Code": "89",
+    "CnyChinese": "船舶及浮動構造體",
+    "CnyEnglish": "Ships, Boats And Floating Structures"
+  },
+  {
+    "Code": "90",
+    "CnyChinese": "光學、照相、電影、計量、檢查、精密、內科或外科儀器及器具；上述物品之零件及附件",
+    "CnyEnglish": "Optical, Photographic, Cinematographic, Measuring, Checking, Precision, Medical Or Surgical Instruments And Apparatus; Parts And Accessories Thereof"
+  },
+  {
+    "Code": "91",
+    "CnyChinese": "鐘、錶及其零件",
+    "CnyEnglish": "Clocks And Watches And Parts Thereof"
+  },
+  {
+    "Code": "92",
+    "CnyChinese": "樂器；與其零件及附件",
+    "CnyEnglish": "Musical Instruments; Parts And Accessories Of Such Articles"
+  },
+  {
+    "Code": "93",
+    "CnyChinese": "武器與彈藥；及其零件與附件",
+    "CnyEnglish": "Arms And Ammunition; Parts And Accessories Thereof"
+  },
+  {
+    "Code": "94",
+    "CnyChinese": "家具；寢具、褥、褥支持物、軟墊及類似充填家具；未列名之燈具及照明裝置；照明標誌，照明名牌及類似品；組合式建築物",
+    "CnyEnglish": "Furniture; Bedding, Mattresses, Mattress Supports, Cushions And Similar Stuffed Furnishings; Luminaires And Lighting Fittings, Not Else Where Specified Or Included; Illuminated Signs, Illuminated Name-Plates And The Like; Prefabricated Buildings"
+  },
+  {
+    "Code": "95",
+    "CnyChinese": "玩具、遊戲品與運動用品；及其零件與附件",
+    "CnyEnglish": "Toys, Games And Sports Requisites; Parts And Accessories Thereof"
+  },
+  {
+    "Code": "96",
+    "CnyChinese": "雜項製品",
+    "CnyEnglish": "Miscellaneous Manufactured Articles"
+  },
+  {
+    "Code": "97",
+    "CnyChinese": "藝術品、珍藏品及古董",
+    "CnyEnglish": "Works Of Art, Collectors' Pieces And Antiques"
+  },
+  {
+    "Code": "98",
+    "CnyChinese": "特殊處理物品",
+    "CnyEnglish": "Specially Classified Goods"
+  }
+]

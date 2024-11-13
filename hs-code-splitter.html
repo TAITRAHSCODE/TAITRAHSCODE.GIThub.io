@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HS Code Splitter</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        body { font-family: Arial; padding: 20px; max-width: 800px; margin: 0 auto; }
+        button { margin: 5px; padding: 5px 10px; }
+        #result { margin-top: 20px; padding: 10px; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+    <h2>HS Code Splitter</h2>
+    <input type="file" onchange="readExcel(this)" accept=".xlsx, .xls"/>
+    <div id="result"></div>
+
+    <script>
+        let jsonData = null;
+
+        function readExcel(input) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = e.target.result;
+                const workbook = XLSX.read(data, {type: 'binary'});
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                jsonData = XLSX.utils.sheet_to_json(firstSheet);
+                processHSCode(jsonData);
+            };
+            reader.readAsBinaryString(input.files[0]);
+        }
+
+        function processHSCode(data) {
+            // 根據代碼長度分類
+            const hs02 = data.filter(item => item.Code.length === 2);
+            const hs04 = data.filter(item => item.Code.length === 4);
+            const hs06 = data.filter(item => item.Code.length === 6);
+            const hs08 = data.filter(item => item.Code.length === 8);
+            const hs10 = data.filter(item => item.Code.length === 10);
+
+            // 顯示統計
+            document.getElementById('result').innerHTML = `
+                HS02: ${hs02.length} items<br>
+                HS04: ${hs04.length} items<br>
+                HS06: ${hs06.length} items<br>
+                HS08: ${hs08.length} items<br>
+                HS10: ${hs10.length} items<br>
+            `;
+
+            // 下載各個檔案
+            downloadJSON(hs02, 'hs02.json');
+            downloadJSON(hs04, 'hs04.json');
+            downloadJSON(hs06, 'hs06.json');
+            downloadJSON(hs08, 'hs08.json');
+            downloadJSON(hs10, 'hs10.json');
+        }
+
+        function downloadJSON(data, filename) {
+            if (!data || data.length === 0) return;
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', filename);
+            linkElement.click();
+        }
+    </script>
+</body>
+</html>
