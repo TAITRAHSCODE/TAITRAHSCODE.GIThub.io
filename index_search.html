@@ -8,22 +8,34 @@
     <style>
         body { 
             font-family: 'Noto Serif TC', serif; 
-            padding: 15px;
-            max-width: 1200px; 
-            margin: 0 auto;
+            margin: 0;
             line-height: 1.6;
             background: #f5f5f5;
         }
-        .search-container {
-            position: sticky;
-            top: 0;
-            background: white;
+        
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 15px;
-            z-index: 100;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin-bottom: 15px;
+            padding-top: 100px;  /* 為 fixed searchbar 預留空間 */
         }
+
+        .search-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .search-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
         input {
             width: 100%;
             padding: 12px;
@@ -32,10 +44,12 @@
             border-radius: 8px;
             font-family: 'Noto Serif TC', serif;
         }
+
         input:focus {
             outline: none;
             border-color: #4a90e2;
         }
+
         .result-item {
             margin: 10px 0;
             padding: 15px;
@@ -45,6 +59,7 @@
             background: white;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
+
         .code-item {
             padding: 8px;
             border-radius: 4px;
@@ -52,32 +67,39 @@
             transition: background 0.2s;
             margin: 5px 0;
         }
+
         .code-item:hover {
             background: #f5f5f5;
         }
+
         .code-item.main {
             border-left: 4px solid #4a90e2;
             padding-left: 12px;
         }
+
         .code-item.parent {
             color: #666;
             padding-left: 24px;
             position: relative;
         }
+
         .code-item.parent::before {
             content: "↑";
             position: absolute;
             left: 8px;
             color: #999;
         }
+
         .highlight {
             background: #fff3cd;
             padding: 0 2px;
             border-radius: 2px;
         }
+
         .code { 
             font-weight: bold;
         }
+
         .favorite-btn {
             position: absolute;
             right: 15px;
@@ -92,21 +114,26 @@
             justify-content: center;
             transition: all 0.2s;
         }
+
         .favorite-btn:hover {
             background: #f5f5f5;
         }
+
         .favorite-btn .material-icons {
             font-size: 20px;
             color: #666;
         }
+
         .favorite-btn.active .material-icons {
             color: #4a90e2;
         }
+
         .tab-container {
             display: flex;
             gap: 10px;
             margin: 10px 0;
         }
+
         .tab {
             padding: 8px 16px;
             border: 1px solid #ddd;
@@ -116,25 +143,32 @@
             transition: all 0.2s;
             background: white;
         }
+
         .tab:hover {
             background: #f5f5f5;
         }
+
         .tab.active {
             background: #4a90e2;
             color: white;
             border-color: #4a90e2;
         }
+
         @media (max-width: 768px) {
-            body {
+            .content-wrapper {
+                padding: 10px;
+                padding-top: 90px;  /* 調整手機版的間距 */
+            }
+            
+            .search-content {
                 padding: 10px;
             }
-            .search-container {
-                padding: 10px;
-            }
+
             .result-item {
                 padding: 12px;
                 margin: 8px 0;
             }
+
             .favorite-btn {
                 top: 10px;
                 right: 10px;
@@ -144,12 +178,17 @@
 </head>
 <body>
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="輸入代碼、中文或英文關鍵字搜尋...">
-        <div class="tab-container">
-            <div class="tab" onclick="showFavorites()">收藏項目</div>
+        <div class="search-content">
+            <input type="text" id="searchInput" placeholder="輸入代碼、中文或英文關鍵字搜尋...">
+            <div class="tab-container">
+                <div class="tab" onclick="showFavorites()">收藏項目</div>
+            </div>
         </div>
     </div>
-    <div id="results"></div>
+    
+    <div class="content-wrapper">
+        <div id="results"></div>
+    </div>
 
     <script>
         let db;
@@ -221,10 +260,8 @@
             event.stopPropagation();
             
             try {
-                // 先檢查當前收藏狀態
                 const isFav = await isFavorite(code);
                 
-                // 取得項目數據
                 const tx1 = db.transaction([storeName], 'readonly');
                 const hsStore = tx1.objectStore(storeName);
                 const item = await new Promise((resolve, reject) => {
@@ -233,7 +270,6 @@
                     request.onerror = () => reject(request.error);
                 });
         
-                // 新的交易處理收藏操作
                 const tx2 = db.transaction([favoriteStore], 'readwrite');
                 const favStore = tx2.objectStore(favoriteStore);
                 
@@ -246,7 +282,6 @@
                     tx2.onerror = () => reject(tx2.error);
                 });
         
-                // 更新 UI
                 const btn = document.querySelector(`[data-code="${code}"]`);
                 if (btn) {
                     btn.classList.toggle('active');
@@ -258,6 +293,7 @@
                 console.error('收藏操作失敗:', error);
             }
         }        
+
         async function showFavorites() {
             const tx = db.transaction(favoriteStore, 'readonly');
             const store = tx.objectStore(favoriteStore);
@@ -342,15 +378,6 @@
             return text.replace(regex, match => `<span class="highlight">${match}</span>`);
         }
 
-        initDB();
-
-        document.getElementById('searchInput').addEventListener('input', 
-            debounce(e => {
-                const value = e.target.value.trim();
-                if (value.length >= 2) search(value);
-            }, 300)
-        );
-
         function debounce(func, wait) {
             let timeout;
             return function executedFunction(...args) {
@@ -362,6 +389,15 @@
                 timeout = setTimeout(later, wait);
             };
         }
+
+        initDB();
+
+        document.getElementById('searchInput').addEventListener('input', 
+            debounce(e => {
+                const value = e.target.value.trim();
+                if (value.length >= 2) search(value);
+            }, 300)
+        );
     </script>
 </body>
 </html>
