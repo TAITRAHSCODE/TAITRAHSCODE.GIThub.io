@@ -1,0 +1,15 @@
+prompt_text = """請依據我的關鍵字，列出最接近的 HSCODE 項目，回覆一個 JSON 即可，不要說明
+```
+{
+"HS8": "",
+"HS8_DESC_CHT:" ",
+"HS6": "",
+"HS6_DESC_CHT:" ",
+"HS4": "",
+"HS4_DESC_CHT:" ",
+"HS2": "",
+"HS2_DESC_CHT:" "
+}
+```
+{query_text}"""
+
